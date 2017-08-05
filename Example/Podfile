@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'AHDownloadTool_Example' do
+  pod 'AHDownloadTool', :path => '../'
+
+  target 'AHDownloadTool_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
