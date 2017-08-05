@@ -11,8 +11,8 @@
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
-		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		A14575861F3594D900CB6C49 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A14575841F3594D900CB6C49 /* LaunchScreen.storyboard */; };
 		B6DDE2279707EADA6A85590A /* Pods_AHDownloadTool_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAAE3AD83A8999A38F00424A /* Pods_AHDownloadTool_Tests.framework */; };
 		EAC0616441425E521B87F8D7 /* Pods_AHDownloadTool_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C258C642F6D82E2FF5CCE074 /* Pods_AHDownloadTool_Example.framework */; };
 /* End PBXBuildFile section */
@@ -29,7 +29,7 @@
 
 /* Begin PBXFileReference section */
 		2D27B41B890923A25A184716 /* Pods-AHDownloadTool_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AHDownloadTool_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AHDownloadTool_Example/Pods-AHDownloadTool_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		3B128C7554120475F9335030 /* AHDownloadTool.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = AHDownloadTool.podspec; path = ../AHDownloadTool.podspec; sourceTree = "<group>"; };
+		3B128C7554120475F9335030 /* AHDownloadTool.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AHDownloadTool.podspec; path = ../AHDownloadTool.podspec; sourceTree = "<group>"; };
 		402283F8AC8BD56F68FAFFD5 /* Pods-AHDownloadTool_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AHDownloadTool_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AHDownloadTool_Tests/Pods-AHDownloadTool_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* AHDownloadTool_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AHDownloadTool_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -37,13 +37,13 @@
 		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* AHDownloadTool_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AHDownloadTool_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		7C14CBF4A20D223FD3D4CAAE /* Pods-AHDownloadTool_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AHDownloadTool_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AHDownloadTool_Tests/Pods-AHDownloadTool_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		8E47B2151795BC3FB1CE2FC4 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		A915A8B3188BB88FA33FFD75 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		8E47B2151795BC3FB1CE2FC4 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		A14575851F3594D900CB6C49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A915A8B3188BB88FA33FFD75 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		AAAE3AD83A8999A38F00424A /* Pods_AHDownloadTool_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AHDownloadTool_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C258C642F6D82E2FF5CCE074 /* Pods_AHDownloadTool_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AHDownloadTool_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E84EE60B8111DF31AD1DD261 /* Pods-AHDownloadTool_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AHDownloadTool_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AHDownloadTool_Example/Pods-AHDownloadTool_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -97,7 +97,7 @@
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
-				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
+				A14575841F3594D900CB6C49 /* LaunchScreen.storyboard */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
 			name = "Example for AHDownloadTool";
@@ -249,7 +249,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
-				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				A14575861F3594D900CB6C49 /* LaunchScreen.storyboard in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,12 +402,12 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		607FACDE1AFB9204008FA782 /* LaunchScreen.xib */ = {
+		A14575841F3594D900CB6C49 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				607FACDF1AFB9204008FA782 /* Base */,
+				A14575851F3594D900CB6C49 /* Base */,
 			);
-			name = LaunchScreen.xib;
+			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
