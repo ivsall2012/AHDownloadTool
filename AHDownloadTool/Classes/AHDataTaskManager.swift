@@ -8,8 +8,19 @@
 
 import UIKit
 
+private let AHDataTaskManagerDispatchQueueName = "AHDataTaskManagerDispatchQueueName"
+
 public class AHDataTaskManager: NSObject {
     public static var timeout: TimeInterval = 8.0
+    public static var maxConcurrentTasks: Int = 3
+    public static var numberOfTasks: Int {
+        return dataTaskDict.keys.count
+    }
+    
+    // The serial queue use to add download tasks to ensure thread safety.
+    fileprivate static var dispatchQueue: DispatchQueue = {
+        return DispatchQueue(label: AHDataTaskManagerDispatchQueueName)
+    }()
     fileprivate static var dataTaskDict = [String: AHDataTask]()
 }
 
@@ -19,29 +30,31 @@ public extension AHDataTaskManager {
         self.donwload(fileName: fileName, tempDir: nil, cachePath: nil, url: url, fileSizeCallback: fileSizeCallback, progressCallback: progressCallback, successCallback: successCallback, failureCallback: failureCallback)
         
     }
+    /// This method is thread safe.
     public static func donwload(fileName: String?, tempDir: String?, cachePath: String?,url: String, fileSizeCallback: ((_ fileSize: UInt64) -> Void)?, progressCallback: ((_ progress: Double) -> Void)?, successCallback: ((_ filePath: String) -> Void)?, failureCallback: ((_ error: Error?) -> Void)?) {
         
-        var dataTask = dataTaskDict[url]
-    
-        if dataTask == nil {
-            dataTask = AHDataTask()
-            dataTask?.timeout = timeout
-            dataTask?.fileName = fileName
-            dataTask?.tempDir = tempDir
-            dataTask?.cacheDir = cachePath
-            dataTaskDict[url] = dataTask
-            
-            
-            dataTask?.donwload(url: url, fileSizeCallback: fileSizeCallback, progressCallback: progressCallback, successCallback: { (path) in
-                self.dataTaskDict.removeValue(forKey: url)
-                successCallback?(path)
-            }, failureCallback: { (error) in
-                self.dataTaskDict.removeValue(forKey: url)
-                failureCallback?(error)
-            })
-
-        }else{
-            print("download task repeated!")
+        dispatchQueue.async {
+            var dataTask = dataTaskDict[url]
+            if dataTask == nil {
+                dataTask = AHDataTask()
+                dataTask?.timeout = timeout
+                dataTask?.fileName = fileName
+                dataTask?.tempDir = tempDir
+                dataTask?.cacheDir = cachePath
+                dataTaskDict[url] = dataTask
+                
+                
+                dataTask?.donwload(url: url, fileSizeCallback: fileSizeCallback, progressCallback: progressCallback, successCallback: { (path) in
+                    self.dataTaskDict.removeValue(forKey: url)
+                    successCallback?(path)
+                }, failureCallback: { (error) in
+                    self.dataTaskDict.removeValue(forKey: url)
+                    failureCallback?(error)
+                })
+                
+            }else{
+                print("download task repeated!")
+            }
         }
 
     }

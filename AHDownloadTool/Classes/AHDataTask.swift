@@ -8,6 +8,9 @@
 
 import Foundation
 
+private let AHDataTaskDownloadQueueName = "AHDownloadTool-DownloadTask-QueueName"
+
+
 public struct AHHttpHeader {
     static let contentLength = "Content-Length"
     
@@ -28,6 +31,16 @@ public class AHDataTask: NSObject {
     fileprivate var session: URLSession?
     fileprivate weak var task: URLSessionDataTask?
     
+
+    fileprivate static var delegateQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.name = AHDataTaskDownloadQueueName
+        return queue
+    }()
+    
+    // Default is main queue.
+    fileprivate static var callBackQueue: DispatchQueue?
+    
     public var tempDir: String?
     public var cacheDir: String?
     public var fileName: String?
@@ -45,6 +58,8 @@ public class AHDataTask: NSObject {
     fileprivate var successCallback: ((_ filePath: String) -> Void)?
     fileprivate var failureCallback: ((_ error: Error?) -> Void)?
     
+    
+    
     // It is not nil, when there's an error in the current task.
     fileprivate var currentError: Error? = nil
     
@@ -55,12 +70,23 @@ public class AHDataTask: NSObject {
     }
     fileprivate(set) var state = AHDataTaskState.notStarted {
         didSet {
+            var queue: DispatchQueue? = nil
+            if AHDataTask.callBackQueue == nil {
+                queue = DispatchQueue.main
+            }
+            
             switch state {
             case .succeeded:
                 guard let cachePath = self.cacheDir else {return}
-                self.successCallback?(cachePath)
+                
+                queue!.async {
+                     self.successCallback?(cachePath)
+                }
+                
             case .failed:
-                self.failureCallback?(self.currentError)
+                queue!.async {
+                    self.failureCallback?(self.currentError)
+                }
             default:
                 break
             }
@@ -200,7 +226,7 @@ extension AHDataTask {
         
         if session == nil {
             let config = URLSessionConfiguration.ephemeral
-            session = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
+            session = URLSession(configuration: config, delegate: self, delegateQueue: AHDataTask.delegateQueue)
         }
         
         // use var to delare mutable tyepe, instead of using NSMutableURLRequest
@@ -336,7 +362,7 @@ extension AHDataTask: URLSessionDataDelegate {
                 state = .failed
                 return
         }
-        
+        print("finished download thread:\(Thread.current)")
         if error == nil {
             AHFileTool.moveItem(atPath: tempPath, toPath: cachePath)
             state = .succeeded
