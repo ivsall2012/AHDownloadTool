@@ -39,6 +39,9 @@ public class AHFileSizeProbe: NSObject {
     fileprivate var session: URLSession?
     fileprivate var taskDict = [String: AHFileProbeTask]()
     
+    // [redirectedURL: originalURL]
+    fileprivate var taskRedirectDict = [String: String]()
+    
     public static func probe(urlStr: String, _ completion: @escaping AHFileSizeProbeCompletionSingle) {
         // One probe object with only one probe task
         self.probeFile(urlStr: urlStr, completion)
@@ -83,7 +86,7 @@ public class AHFileSizeProbe: NSObject {
     // return file sizes in the order of the urlStrs array.
     // This method will remove currently probing tasks, if you called this method before and it's still probing now. And this method won't affect the shared probe!
     public static func probeBatch(urlStrs: [String], _ completion: @escaping AHFileSizeProbeCompletionBatch) {
-        // One probe object with only many probe tasks
+        // One probe object with many probe tasks
         
         let probe = AHFileSizeProbe()
         self.probes.append(probe)
@@ -141,6 +144,22 @@ public class AHFileSizeProbe: NSObject {
 
 // The delegate is 'URLSessionDataDelegate' not 'URLSessionDelegate'!!!
 extension AHFileSizeProbe: URLSessionDataDelegate {
+    public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
+        
+        if let origin = task.currentRequest?.url?.absoluteString, let new = request.url?.absoluteString {
+            
+            if let originFurther = self.taskRedirectDict[origin] {
+                self.taskRedirectDict[new] = originFurther
+            }else{
+                self.taskRedirectDict[new] = origin
+            }
+        }
+        
+        
+        completionHandler(request)
+    }
+    
+    
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Swift.Void) {
         guard let request = dataTask.currentRequest else {
             return
@@ -149,7 +168,18 @@ extension AHFileSizeProbe: URLSessionDataDelegate {
             return
         }
         
-        guard let probeTask = taskDict[url.absoluteString] else {
+        var probeTaskTemp: AHFileProbeTask? = nil
+        
+        if let originalURL = taskRedirectDict[url.absoluteString], let task = taskDict[originalURL] {
+            probeTaskTemp = task
+        }
+        
+        if let task = taskDict[url.absoluteString] {
+            // no redrection, use the url directly
+            probeTaskTemp = task
+        }
+        
+        guard let probeTask = probeTaskTemp else {
             print("No such probeTask with url:\(url.absoluteString)")
             return
         }
