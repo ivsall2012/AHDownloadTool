@@ -28,6 +28,9 @@ public enum AHDataTaskState {
 
 
 public class AHDataTask: NSObject {
+    public static var maxConcurrentTasks: Int = 1
+    
+    
     fileprivate var session: URLSession?
     fileprivate weak var task: URLSessionDataTask?
     
@@ -35,6 +38,7 @@ public class AHDataTask: NSObject {
     fileprivate static var delegateQueue: OperationQueue = {
         let queue = OperationQueue()
         queue.name = AHDataTaskDownloadQueueName
+        queue.maxConcurrentOperationCount = maxConcurrentTasks
         return queue
     }()
     

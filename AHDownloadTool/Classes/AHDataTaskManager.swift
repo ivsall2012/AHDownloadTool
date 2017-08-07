@@ -12,7 +12,14 @@ private let AHDataTaskManagerDispatchQueueName = "AHDataTaskManagerDispatchQueue
 
 public class AHDataTaskManager: NSObject {
     public static var timeout: TimeInterval = 8.0
-    public static var maxConcurrentTasks: Int = 3
+    public static var maxConcurrentTasks: Int = 1 {
+        didSet {
+            guard maxConcurrentTasks > 0 else {return}
+            AHDataTask.maxConcurrentTasks = maxConcurrentTasks
+        }
+    }
+    
+    /// The total tasks currently in the stack, including ones downloading and pending.
     public static var numberOfTasks: Int {
         return dataTaskDict.keys.count
     }
@@ -25,6 +32,16 @@ public class AHDataTaskManager: NSObject {
 }
 
 public extension AHDataTaskManager {
+    /// If it has the task, but not downloading, thhis means the task is pending.
+    public static func hasTask(_ urlStr: String) -> Bool{
+        if let _ = dataTaskDict[urlStr] {
+            return true
+        }else{
+            return false
+        }
+        
+    }
+    
     public static func donwload(fileName: String?=nil, url: String, fileSizeCallback: ((_ fileSize: UInt64) -> Void)?, progressCallback: ((_ progress: Double) -> Void)?, successCallback: ((_ filePath: String) -> Void)?, failureCallback: ((_ error: Error?) -> Void)?) {
         
         self.donwload(fileName: fileName, tempDir: nil, cachePath: nil, url: url, fileSizeCallback: fileSizeCallback, progressCallback: progressCallback, successCallback: successCallback, failureCallback: failureCallback)
@@ -56,7 +73,7 @@ public extension AHDataTaskManager {
                 print("download task repeated!")
             }
         }
-
+        
     }
     
     public static func resume(url: String) {
