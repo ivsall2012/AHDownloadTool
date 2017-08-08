@@ -60,7 +60,7 @@ public extension AHDataTaskManager {
                 dataTask?.cacheDir = cachePath
                 dataTaskDict[url] = dataTask
                 
-                
+                // Default AHDataTask's callback queue is main
                 dataTask?.donwload(url: url, fileSizeCallback: fileSizeCallback, progressCallback: progressCallback, successCallback: { (path) in
                     self.dataTaskDict.removeValue(forKey: url)
                     successCallback?(path)

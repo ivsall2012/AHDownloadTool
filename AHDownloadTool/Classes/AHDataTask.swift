@@ -343,7 +343,16 @@ extension AHDataTask: URLSessionDataDelegate {
             outputStream = OutputStream(url: url, append: true)
             outputStream?.open()
             state = .downloading
-            fileSizeCallback?(totalSize)
+            
+            if self.fileSizeCallback != nil {
+                var queue: DispatchQueue? = nil
+                if AHDataTask.callBackQueue == nil {
+                    queue = DispatchQueue.main
+                }
+                queue?.async {
+                    self.fileSizeCallback?(totalSize)
+                }
+            }
             completionHandler(.allow)
         }
     }
@@ -356,7 +365,18 @@ extension AHDataTask: URLSessionDataDelegate {
         offsetSize = offsetSize + UInt64(data.count)
         
         progress = Double(offsetSize) / Double(totalSize)
-        self.progressCallback?(progress)
+        
+        
+        if self.progressCallback != nil {
+            var queue: DispatchQueue? = nil
+            if AHDataTask.callBackQueue == nil {
+                queue = DispatchQueue.main
+            }
+            queue?.async {
+                self.progressCallback?(self.progress)
+            }
+        }
+        
         
     }
     
@@ -366,7 +386,6 @@ extension AHDataTask: URLSessionDataDelegate {
                 state = .failed
                 return
         }
-        print("finished download thread:\(Thread.current)")
         if error == nil {
             AHFileTool.moveItem(atPath: tempPath, toPath: cachePath)
             state = .succeeded
