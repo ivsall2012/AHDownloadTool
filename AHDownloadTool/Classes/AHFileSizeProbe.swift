@@ -87,7 +87,9 @@ public class AHFileSizeProbe: NSObject {
     // This method will remove currently probing tasks, if you called this method before and it's still probing now. And this method won't affect the shared probe!
     public static func probeBatch(urlStrs: [String], _ completion: @escaping AHFileSizeProbeCompletionBatch) {
         // One probe object with many probe tasks
-        
+        guard urlStrs.count > 0 else {
+            return
+        }
         let probe = AHFileSizeProbe()
         self.probes.append(probe)
         
