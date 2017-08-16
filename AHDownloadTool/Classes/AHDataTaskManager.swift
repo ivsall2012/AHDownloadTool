@@ -11,7 +11,7 @@ import UIKit
 private let AHDataTaskManagerDispatchQueueName = "AHDataTaskManagerDispatchQueueName"
 
 public class AHDataTaskManager: NSObject {
-    public static var timeout: TimeInterval = 8.0
+    public static var timeout: TimeInterval = 0
     public static var maxConcurrentTasks: Int = 1 {
         didSet {
             guard maxConcurrentTasks > 0 else {return}
@@ -42,6 +42,24 @@ public extension AHDataTaskManager {
         
     }
     
+    /// Is this task acutally paused but still in the download stack?
+    /// Will return false when there's no such task.
+    public static func isTaskPaused(_ urlStr: String) -> Bool{
+        if let task = dataTaskDict[urlStr] {
+            return task.state == .pausing
+        }else{
+            return false
+        }
+    }
+    
+    public static func getTaskTempFilePath(_ urlStr: String) -> String? {
+        if let task = dataTaskDict[urlStr] {
+            return task.fileTempPath
+        }else{
+            return nil
+        }
+    }
+    
     public static func donwload(fileName: String?=nil, url: String, fileSizeCallback: ((_ fileSize: UInt64) -> Void)?, progressCallback: ((_ progress: Double) -> Void)?, successCallback: ((_ filePath: String) -> Void)?, failureCallback: ((_ error: Error?) -> Void)?) {
         
         self.donwload(fileName: fileName, tempDir: nil, cachePath: nil, url: url, fileSizeCallback: fileSizeCallback, progressCallback: progressCallback, successCallback: successCallback, failureCallback: failureCallback)
@@ -62,11 +80,17 @@ public extension AHDataTaskManager {
                 
                 // Default AHDataTask's callback queue is main
                 dataTask?.donwload(url: url, fileSizeCallback: fileSizeCallback, progressCallback: progressCallback, successCallback: { (path) in
-                    self.dataTaskDict.removeValue(forKey: url)
-                    successCallback?(path)
+                    
+                    DispatchQueue.main.async {
+                        self.dataTaskDict.removeValue(forKey: url)
+                        successCallback?(path)
+                    }
+                
                 }, failureCallback: { (error) in
-                    self.dataTaskDict.removeValue(forKey: url)
-                    failureCallback?(error)
+                    DispatchQueue.main.async {
+                        self.dataTaskDict.removeValue(forKey: url)
+                        failureCallback?(error)
+                    }
                 })
                 
             }else{

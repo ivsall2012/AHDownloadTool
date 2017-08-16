@@ -48,6 +48,13 @@ public class AHDataTask: NSObject {
     public var tempDir: String?
     public var cacheDir: String?
     public var fileName: String?
+    public var fileTempPath: String? {
+        if let filePath = self.fileName {
+            return getTempPath(fileName: filePath)
+        }else{
+            return nil
+        }
+    }
     public var timeout: TimeInterval = 8.0
     
     // only for the file in cache, and this size is the current size of the file
@@ -176,6 +183,7 @@ extension AHDataTask {
         task?.suspend()
     }
     
+
     public func cancel() {
         guard state == .downloading || state == .pausing else {
             print("cancel state is not in downloading or pausing")
@@ -185,6 +193,10 @@ extension AHDataTask {
         task?.cancel()
         session?.invalidateAndCancel()
         session = nil
+        
+        
+//        let path = getTempPath(fileName: fileName!)
+//        AHFileTool.remove(filePath: path)
     }
     
 }
@@ -262,22 +274,34 @@ extension AHDataTask {
     /// This method's logic should be reconsidered!!!
     fileprivate func getName(url: String) -> String {
         if fileName == nil {
-            return (url as NSString).lastPathComponent
-        }else{
-            return fileName!
+            fileName =  (url as NSString).lastPathComponent
         }
+        return fileName!
     }
     
     fileprivate func getTempPath(fileName: String) -> String{
-        let tempDir = self.tempDir == nil ? NSTemporaryDirectory() : self.tempDir!
-        let temp = (tempDir as NSString).appendingPathComponent(fileName)
-        return temp
+        if UIDevice.isSimulator {
+            let tempDir = "/Users/Hurricane/Go/Swift/AHFM/Audios/temp"
+            let temp = (tempDir as NSString).appendingPathComponent(fileName)
+            return temp
+        }else{
+            let tempDir = self.tempDir == nil ? NSTemporaryDirectory() : self.tempDir!
+            let temp = (tempDir as NSString).appendingPathComponent(fileName)
+            return temp
+        }
+        
     }
     
     fileprivate func getCachePath(fileName: String) -> String {
-        let cacheDir = self.cacheDir == nil ? NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! : self.cacheDir!
-        let cachePath = (cacheDir as NSString).appendingPathComponent(fileName)
-        return cachePath
+        if UIDevice.isSimulator {
+            let cacheDir = "/Users/Hurricane/Go/Swift/AHFM/Audios/cache"
+            let cachePath = (cacheDir as NSString).appendingPathComponent(fileName)
+            return cachePath
+        }else{
+            let cacheDir = self.cacheDir == nil ? NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! : self.cacheDir!
+            let cachePath = (cacheDir as NSString).appendingPathComponent(fileName)
+            return cachePath
+        }
     }
     
 }
@@ -403,7 +427,11 @@ extension AHDataTask: URLSessionDataDelegate {
 
 
 
-
+extension UIDevice {
+    static var isSimulator: Bool {
+        return ProcessInfo.processInfo.environment["SIMULATOR_DEVICE_NAME"] != nil
+    }
+}
 
 
 

@@ -68,7 +68,7 @@ class ViewController: UIViewController {
             print("testURL4 ok, path:\(filePath)")
             AHFileTool.remove(filePath: filePath)
         }) { (error) in
-            print("testURL4 failed error:\(error)")
+            print("testURL4 failed error:\(String(describing: error))")
         }
         
         
@@ -80,7 +80,7 @@ class ViewController: UIViewController {
             print("testURL3 ok, path:\(filePath)")
             AHFileTool.remove(filePath: filePath)
         }) { (error) in
-            print("testURL3 failed error:\(error)")
+            print("testURL3 failed error:\(String(describing: error))")
         }
         
         
