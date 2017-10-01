@@ -1,5 +1,5 @@
 PODS:
-  - AHDownloadTool (0.1.0)
+  - AHDownloadTool (0.1.6)
 
 DEPENDENCIES:
   - AHDownloadTool (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AHDownloadTool: 42b47fa7d85f2ef6a6621f4fee2e05579ac6845d
+  AHDownloadTool: e71081196652a934fbd98fc48869e087baba7c26
 
 PODFILE CHECKSUM: 8a55f645cf98e280d75ba5242d98c7ba2fe8fe93
 

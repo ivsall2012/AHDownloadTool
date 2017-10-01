@@ -34,7 +34,7 @@ public class AHDataTask: NSObject {
     fileprivate var session: URLSession?
     fileprivate weak var task: URLSessionDataTask?
     
-
+    
     fileprivate static var delegateQueue: OperationQueue = {
         let queue = OperationQueue()
         queue.name = AHDataTaskDownloadQueueName
@@ -91,7 +91,7 @@ public class AHDataTask: NSObject {
                 guard let cachePath = self.cacheDir else {return}
                 
                 queue!.async {
-                     self.successCallback?(cachePath)
+                    self.successCallback?(cachePath)
                 }
                 
             case .failed:
@@ -133,12 +133,12 @@ extension AHDataTask {
         
         
         // A. file is already downloaded in cache dir
-            // 1. notify outside info(localPath, fileSize)
+        // 1. notify outside info(localPath, fileSize)
         if AHFileTool.doesFileExist(filePath: cacheDir!) {
             state = .succeeded
             return
         }
-
+        
         
         tempDir = getTempPath(fileName: fileName)
         
@@ -183,7 +183,7 @@ extension AHDataTask {
         task?.suspend()
     }
     
-
+    
     public func cancel() {
         guard state == .downloading || state == .pausing else {
             print("cancel state is not in downloading or pausing")
@@ -195,8 +195,8 @@ extension AHDataTask {
         session = nil
         
         
-//        let path = getTempPath(fileName: fileName!)
-//        AHFileTool.remove(filePath: path)
+        //        let path = getTempPath(fileName: fileName!)
+        //        AHFileTool.remove(filePath: path)
     }
     
 }
@@ -249,7 +249,7 @@ extension AHDataTask {
         var request = URLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: timeout)
         // if offset is 0, "Content-Range" would not appear in the response
         request.setValue("bytes=\(offsetSize)-", forHTTPHeaderField: "Range")
-
+        
         task = session?.dataTask(with: request)
         
         resume()
@@ -280,28 +280,16 @@ extension AHDataTask {
     }
     
     fileprivate func getTempPath(fileName: String) -> String{
-        if UIDevice.isSimulator {
-            let tempDir = "/Users/Hurricane/Go/Swift/AHFM/Audios/temp"
-            let temp = (tempDir as NSString).appendingPathComponent(fileName)
-            return temp
-        }else{
-            let tempDir = self.tempDir == nil ? NSTemporaryDirectory() : self.tempDir!
-            let temp = (tempDir as NSString).appendingPathComponent(fileName)
-            return temp
-        }
+        let tempDir = self.tempDir == nil ? NSTemporaryDirectory() : self.tempDir!
+        let temp = (tempDir as NSString).appendingPathComponent(fileName)
+        return temp
         
     }
     
     fileprivate func getCachePath(fileName: String) -> String {
-        if UIDevice.isSimulator {
-            let cacheDir = "/Users/Hurricane/Go/Swift/AHFM/Audios/cache"
-            let cachePath = (cacheDir as NSString).appendingPathComponent(fileName)
-            return cachePath
-        }else{
-            let cacheDir = self.cacheDir == nil ? NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! : self.cacheDir!
-            let cachePath = (cacheDir as NSString).appendingPathComponent(fileName)
-            return cachePath
-        }
+        let cacheDir = self.cacheDir == nil ? NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first! : self.cacheDir!
+        let cachePath = (cacheDir as NSString).appendingPathComponent(fileName)
+        return cachePath
     }
     
 }
@@ -348,10 +336,10 @@ extension AHDataTask: URLSessionDataDelegate {
         //  4.3.2 resume download from currentSize
         
         guard let cachePath = self.cacheDir,
-              let tempPath = self.tempDir else {
-            print("didReceive response: no cachePath or tempPath")
-            completionHandler(.cancel)
-            return
+            let tempPath = self.tempDir else {
+                print("didReceive response: no cachePath or tempPath")
+                completionHandler(.cancel)
+                return
         }
         
         
