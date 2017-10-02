@@ -32,6 +32,12 @@ public class AHDataTaskManager: NSObject {
 }
 
 public extension AHDataTaskManager {
+    public static func getCurrentTaskURLs() -> [String] {
+        return dataTaskDict.keys.map({ (str) -> String in
+            return str
+        })
+    }
+    
     public static func getState(_ urlStr: String) -> AHDataTaskState {
         if let task = dataTaskDict[urlStr] {
             return task.state
@@ -73,7 +79,7 @@ public extension AHDataTaskManager {
                         successCallback?(path)
                         self.dataTaskDict.removeValue(forKey: url)
                     }
-                
+                    
                 }, failureCallback: { (error) in
                     DispatchQueue.main.async {
                         failureCallback?(error)
