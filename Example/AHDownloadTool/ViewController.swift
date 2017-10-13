@@ -51,7 +51,7 @@ class ViewController: UIViewController {
         
         AHFileSizeProbe.probeBatch(urlStrs: [testURL1,testURL2,testURL3,testURL4]) { (sizeDict) in
             for (offset: i, element: (key: url, value: fileSize)) in sizeDict.enumerated() {
-                print("url:\(value) fileSize:\(fileSize)")
+                print("url:\(url) fileSize:\(fileSize)")
             }
         }
         
