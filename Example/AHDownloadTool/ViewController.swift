@@ -49,9 +49,9 @@ class ViewController: UIViewController {
             }
         }
         
-        AHFileSizeProbe.probeBatch(urlStrs: [testURL1,testURL2,testURL3,testURL4]) { (sizes) in
-            for value in sizes.values {
-                print("batch size:\(value)")
+        AHFileSizeProbe.probeBatch(urlStrs: [testURL1,testURL2,testURL3,testURL4]) { (sizeDict) in
+            for (offset: i, element: (key: url, value: fileSize)) in sizeDict.enumerated() {
+                print("url:\(value) fileSize:\(fileSize)")
             }
         }
         
@@ -87,6 +87,7 @@ class ViewController: UIViewController {
     }
     @IBAction func pauseTapped(_ sender: UIButton) {
         AHDataTaskManager.pauseAll()
+        AHDataTaskManager.pause(url: <#T##String#>)
     }
     @IBAction func resumeTapped(_ sender: UIButton) {
         AHDataTaskManager.resumeAll()
